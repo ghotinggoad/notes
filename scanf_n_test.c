@@ -1,4 +1,6 @@
 /*
+    This program is usd to find out when you need to use scanf("\n"). -ghotinggoad
+
     Notes
     \ <- this character ignores special characters that use '\' character in strings.
     % <- this character ignores special characters that use '%' character in strings.
