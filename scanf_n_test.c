@@ -1,11 +1,20 @@
 /*
-    This program is usd to find out when you need to use scanf("\n"). -ghotinggoad
+    Introduction
+    When you mix scanf and fgets, inputs are sometimes skipped and you need to flush stdin buffer for the logic flow to be correct.
+    This program is used to find out when you need to use scanf("\n") ensure no input is skipped.
+    Input methods used are scanf and fgets (stdin), sscanf and gets are not tested here.
 
     Notes
+    Use scanf(" %c") instead of scanf("%c") or else \n isn't flushed before the scanf for characters.
     \ <- this character ignores special characters that use '\' character in strings.
     % <- this character ignores special characters that use '%' character in strings.
     ie. printf("scanf(\"\\n\");"); outputs "scanf("\n")";
     ie. printf("printf("%%c");"); outputs "printf("%c")";
+    
+    Conclusion
+    You need to use scanf("\n") when transitioning from scanf to fgets. -ghotinggoad
+    
+    Reference
 */
 
 #include <stdio.h>
