@@ -1,20 +1,20 @@
 /*
     Introduction
     When you mix scanf and fgets, inputs are sometimes skipped and you need to flush stdin buffer for the logic flow to be correct.
-    This program is used to find out when you need to use scanf("\n") ensure no input is skipped.
+    This program is used to find out when you need to use scanf("\n") or scanf("%c", &dummyChar) to ensure no input is skipped.
     Input methods used are scanf and fgets (stdin), sscanf and gets are not tested here.
 
     Notes
     Use scanf(" %c") instead of scanf("%c") or else \n isn't flushed before the scanf for characters.
     \ <- this character ignores special characters that use '\' character in strings.
+    ie. printf("scanf(\"\\n\");") outputs scanf("\n")
     % <- this character ignores special characters that use '%' character in strings.
-    ie. printf("scanf(\"\\n\");"); outputs "scanf("\n")";
-    ie. printf("printf("%%c");"); outputs "printf("%c")";
+    ie. printf("printf("%%c");") outputs printf("%c")
+    Use fgets and pointer to get strings with spaces if you cannot predict the number of spaces,
+    scanf("%s", string) will ignore sub-strings after whitespaces unless formatted properly.
     
     Conclusion
     You need to use scanf("\n") when transitioning from scanf to fgets. -ghotinggoad
-    
-    Reference
 */
 
 #include <stdio.h>
@@ -34,12 +34,15 @@ void scanf_int_to_fgets_string();
 void fgets_string_to_scanf_int();
 void scanf_char_to_fgets_string();
 void fgets_string_to_scanf_char();
+void scanf_string_to_fgets_string();
+void fgets_string_to_scanf_string();
 
 int main(){
     int choice;
+    char dummyChar;
     printf("This program is used to test when you need to use scanf(\"\\n\");\n");
 
-    while(choice < 1 || choice > 15){
+    while(choice < 1 || choice > 17){
         printf("Select a test case to find out if scanf(\"\\n\") is needed to prevent input skipping.\n");
         printf("1\tscanf int to scanf int\n");
         printf("2\tscanf char to scanf char\n");
@@ -55,9 +58,12 @@ int main(){
         printf("12\tfgets string to scanf int\n");
         printf("13\tscanf char to fgets string\n");
         printf("14\tfgets string to scanf char\n");
-        printf("15\tconclusion\n\n");
+        printf("15\tscanf string to fgets string\n");
+        printf("16\tfgets string to scanf string\n");
+        printf("17\tconclusion\n\n");
         printf("Test case: ");
         scanf("%d", &choice);
+        scanf("%c", &dummyChar);
         printf("\n");
         switch(choice){
             case 1:
@@ -103,7 +109,13 @@ int main(){
                 fgets_string_to_scanf_char();
                 break;
             case 15:
-                printf("You need to use scanf(\"\\n\") when transitioning from scanf to fgets.\n");
+                scanf_string_to_fgets_string();
+                break;
+            case 16:
+                fgets_string_to_scanf_string();
+                break;
+            case 17:
+                printf("You need to use scanf(\"\\n\") when transitioning from scanf to fgets.\n\n");
                 break;
             default:
                 printf("Invalid input, please try again.\n\n");
@@ -113,6 +125,7 @@ int main(){
     return 0;
 }
 
+// 1
 void scanf_int_to_scanf_int(){
     int num1, num2;
     printf("scanf int to scanf int\n");
@@ -123,6 +136,7 @@ void scanf_int_to_scanf_int(){
     printf("Result: %d, %d\nNo input skip observed.\n\n", num1, num2);
 }
 
+// 2
 void scanf_char_to_scanf_char(){
     char alpha1, alpha2;
     printf("scanf char to scanf char\n");
@@ -134,6 +148,7 @@ void scanf_char_to_scanf_char(){
     printf("*** Use scanf(\" %%c\") instead of scanf(\"%%c\").\n\n");
 }
 
+// 3
 void scanf_string_to_scanf_string(){
     char string1[100], string2[100];
     printf("scanf string to scanf string\n");
@@ -144,6 +159,7 @@ void scanf_string_to_scanf_string(){
     printf("Result: %s, %s\nNo input skip observed.\n\n", string1, string2);
 }
 
+// 4
 void fgets_string_to_fgets_string(){
     char *p, string1[100], string2[100];
     printf("fgets string to fgets string\n");
@@ -153,10 +169,10 @@ void fgets_string_to_fgets_string(){
     printf("Enter another string: ");
     fgets(string2, 100, stdin);
     if(p = strchr(string2, '\n')) *p = '\0';
-    printf("Result: %s, %s\nOne input skip observed.\n", string1, string2);
-    printf("*** Use scanf(\"\\n\") before the first fgets() to clear '\\n' from the stdin buffer.\n\n");
+    printf("Result: %s, %s\nNo input skip observed.\n\n", string1, string2);
 }
 
+// 5
 void scanf_int_to_scanf_char(){
     int num1;
     char alpha2;
@@ -169,6 +185,7 @@ void scanf_int_to_scanf_char(){
     printf("*** Use scanf(\" %%c\") instead of scanf(\"%%c\").\n\n");
 }
 
+// 6
 void scanf_char_to_scanf_int(){
     char alpha1;
     int num2;
@@ -181,6 +198,7 @@ void scanf_char_to_scanf_int(){
     printf("*** Use scanf(\" %%c\") instead of scanf(\"%%c\").\n\n");
 }
 
+// 7
 void scanf_int_to_scanf_string(){
     int num1;
     char string2[100];
@@ -192,6 +210,7 @@ void scanf_int_to_scanf_string(){
     printf("Result: %d, %s\nNo input skip observed.\n\n", num1, string2);
 }
 
+// 8
 void scanf_string_to_scanf_int(){
     char string1[100];
     int num2;
@@ -203,6 +222,7 @@ void scanf_string_to_scanf_int(){
     printf("Result: %s, %d\nNo input skip observed.\n\n", string1, num2);
 }
 
+// 9
 void scanf_char_to_scanf_string(){
     char alpha1, string2[100];
     printf("scanf char to scanf string\n");
@@ -213,6 +233,7 @@ void scanf_char_to_scanf_string(){
     printf("Result: %c, %s\nNo input skip observed.\n\n", alpha1, string2);
 }
 
+// 10
 void scanf_string_to_scanf_char(){
     char string1[100], alpha2;
     printf("scanf string to scanf char\n");
@@ -223,6 +244,7 @@ void scanf_string_to_scanf_char(){
     printf("Result: %s, %c\nNo input skip observed.\n\n", string1, alpha2);
 }
 
+// 11
 void scanf_int_to_fgets_string(){
     int num1;
     char *p, string2[100];
@@ -236,6 +258,7 @@ void scanf_int_to_fgets_string(){
     printf("*** Use scanf(\"\\n\") before the first fgets() to clear '\\n' from the stdin buffer.\n\n");
 }
 
+// 12
 void fgets_string_to_scanf_int(){
     char *p, string1[100];
     int num2;
@@ -245,10 +268,10 @@ void fgets_string_to_scanf_int(){
     if(p = strchr(string1, '\n')) *p = '\0';
     printf("Enter an int: ");
     scanf("%d", &num2);
-    printf("Result: %s, %d\nOne input skip observed.\n", string1, num2);
-    printf("*** Use scanf(\"\\n\") before the first fgets() to clear '\\n' from the stdin buffer.\n\n");
+    printf("Result: %s, %d\nNo input skip observed.\n\n", string1, num2);
 }
 
+// 13
 void scanf_char_to_fgets_string(){
     char *p, alpha1, string2[100];
     printf("scanf char to fgets string\n");
@@ -261,6 +284,7 @@ void scanf_char_to_fgets_string(){
     printf("*** Use scanf(\"\\n\") before the first fgets() to clear '\\n' from the stdin buffer.\n\n");
 }
 
+// 14
 void fgets_string_to_scanf_char(){
     char *p, string1[100], alpha2;
     printf("fgets string to scanf char\n");
@@ -269,6 +293,30 @@ void fgets_string_to_scanf_char(){
     if(p = strchr(string1, '\n')) *p = '\0';
     printf("Enter an char: ");
     scanf(" %c", &alpha2);
-    printf("Result: %s, %c\nOne input skip observed.\n", string1, alpha2);
+    printf("Result: %s, %c\nNo input skip observed.\n\n", string1, alpha2);
+}
+
+//15
+void scanf_string_to_fgets_string(){
+    char *p, string1[100], string2[100];
+    printf("scanf string to fgets string\n");
+    printf("Enter a string: ");
+    scanf("%s", string1);
+    printf("Enter another string: ");
+    fgets(string2, 100, stdin);
+    if(p = strchr(string2, '\n')) *p = '\0';
+    printf("Result: %s, %s\nOne input skip observed.\n", string1, string2);
     printf("*** Use scanf(\"\\n\") before the first fgets() to clear '\\n' from the stdin buffer.\n\n");
+}
+
+//16
+void fgets_string_to_scanf_string(){
+    char *p, string1[100], string2[100];
+    printf("fgets string to scanf string\n");
+    printf("Enter a string: ");
+    fgets(string1, 100, stdin);
+    if(p = strchr(string1, '\n')) *p = '\0';
+    printf("Enter another string: ");
+    scanf("%s", string2);
+    printf("Result: %s, %s\nOne input skip observed.\n\n", string1, string2);
 }
